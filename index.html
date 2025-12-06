@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Windows → WSL Path Converter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f7f7f7;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      cursor: pointer;
+      background: #4a90e2;
+      color: white;
+      border: none;
+      font-size: 17px;
+    }
+    button:hover {
+      background: #3577c7;
+    }
+    .output {
+      background: white;
+      padding: 12px;
+      margin-top: 15px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h2>Windows → WSL Path Converter</h2>
+  <p>Paste any Windows path (e.g., <b>C:\Users\Name\Folder With Spaces</b>) and get the WSL version.</p>
+
+  <textarea id="winPath" rows="3" placeholder="Paste Windows path here..."></textarea>
+  <button onclick="convertPath()">Convert</button>
+
+  <div id="result" class="output"></div>
+
+  <script>
+    function convertPath() {
+      const input = document.getElementById("winPath").value.trim();
+      if (!input) {
+        document.getElementById("result").innerText = "Please enter a path.";
+        return;
+      }
+
+      // Convert drive letter
+      let converted = input.replace(/^[A-Za-z]:/, match => "/mnt/" + match[0].toLowerCase());
+
+      // Replace backslashes with slashes
+      converted = converted.replace(/\\/g, "/");
+
+      // Add quotes if spaces exist
+      if (converted.includes(" ")) {
+        converted = `"${converted}"`;
+      }
+
+      document.getElementById("result").innerText = converted;
+    }
+  </script>
+</body>
+</html>
